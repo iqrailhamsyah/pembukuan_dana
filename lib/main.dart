@@ -4,7 +4,7 @@ import 'package:uangkoo/pages/home_page.dart';
 import 'package:uangkoo/pages/main_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +13,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: MainPage(), theme: ThemeData(primarySwatch: Colors.green));
+        home: const MainPage(), theme: ThemeData(primarySwatch: Colors.green));
   }
 }

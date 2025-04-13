@@ -62,15 +62,15 @@ class _CategoryPageState extends State<CategoryPage> {
                       fontSize: 18,
                       color: (isExpense!) ? Colors.red : Colors.green),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
                   controller: categoryNameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: "Name"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 ElevatedButton(
@@ -83,7 +83,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                     },
-                    child: Text("Save"))
+                    child: const Text("Save"))
               ],
             ))),
           );
@@ -126,7 +126,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   onPressed: () {
                     openDialog(null);
                   },
-                  icon: Icon(Icons.add))
+                  icon: const Icon(Icons.add))
             ],
           ),
         ),
@@ -134,12 +134,12 @@ class _CategoryPageState extends State<CategoryPage> {
           future: getAllCategory(type!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {
               if (snapshot.hasData) {
-                if (snapshot.data!.length > 0) {
+                if (snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data?.length,
@@ -153,18 +153,18 @@ class _CategoryPageState extends State<CategoryPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                     onPressed: () {
                                       database.deleteCategoryRepo(
                                           snapshot.data![index].id);
                                       setState(() {});
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit),
                                     onPressed: () {
                                       openDialog(snapshot.data![index]);
                                     },
@@ -172,7 +172,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ],
                               ),
                               leading: Container(
-                                  padding: EdgeInsets.all(3),
+                                  padding: const EdgeInsets.all(3),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8)),
@@ -189,12 +189,12 @@ class _CategoryPageState extends State<CategoryPage> {
                     },
                   );
                 } else {
-                  return Center(
+                  return const Center(
                     child: Text("No has data"),
                   );
                 }
               } else {
-                return Center(
+                return const Center(
                   child: Text("No has data"),
                 );
               }
