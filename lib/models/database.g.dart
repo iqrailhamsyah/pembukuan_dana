@@ -227,7 +227,7 @@ class $CategoriesTable extends Categories
       'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+      hasAutoIncrement: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -592,7 +592,7 @@ class $TransactionsTable extends Transactions
       'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+      hasAutoIncrement: true);
   final VerificationMeta _descriptionMeta =
       const VerificationMeta('description');
   @override
