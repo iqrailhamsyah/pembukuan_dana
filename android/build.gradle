@@ -1,14 +1,7 @@
-buildscript {
-    ext.kotlin_version = '1.6.10'
+allprojects {
     repositories {
         google()
         mavenCentral()
-    }
-
-    dependencies {
-        classpath "dev.flutter:flutter-gradle-plugin"
-        classpath 'com.android.tools.build:gradle:8.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
