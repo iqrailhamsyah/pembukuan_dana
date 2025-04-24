@@ -2,11 +2,126 @@
 
 part of 'database.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
+class $CategoriesTable extends Categories
+    with TableInfo<$CategoriesTable, Category> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 128),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<int> type = GeneratedColumn<int>(
+      'type', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtMeta =
+      const VerificationMeta('deletedAt');
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+      'deleted_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, type, createdAt, updatedAt, deletedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'categories';
+  @override
+  VerificationContext validateIntegrity(Insertable<Category> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(_deletedAtMeta,
+          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Category(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      deletedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
+    );
+  }
+
+  @override
+  $CategoriesTable createAlias(String alias) {
+    return $CategoriesTable(attachedDatabase, alias);
+  }
+}
+
 class Category extends DataClass implements Insertable<Category> {
   final int id;
   final String name;
@@ -88,6 +203,17 @@ class Category extends DataClass implements Insertable<Category> {
         updatedAt: updatedAt ?? this.updatedAt,
         deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
       );
+  Category copyWithCompanion(CategoriesCompanion data) {
+    return Category(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Category(')
@@ -215,88 +341,139 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   }
 }
 
-class $CategoriesTable extends Categories
-    with TableInfo<$CategoriesTable, Category> {
+class $TransactionsTable extends Transactions
+    with TableInfo<$TransactionsTable, Transaction> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CategoriesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $TransactionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      hasAutoIncrement: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 128),
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 250),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  static const VerificationMeta _category_idMeta =
+      const VerificationMeta('category_id');
   @override
-  late final GeneratedColumn<int> type = GeneratedColumn<int>(
-      'type', aliasedName, false,
+  late final GeneratedColumn<int> category_id = GeneratedColumn<int>(
+      'category_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  static const VerificationMeta _transaction_dateMeta =
+      const VerificationMeta('transaction_date');
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+  late final GeneratedColumn<DateTime> transaction_date =
+      GeneratedColumn<DateTime>('transaction_date', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<int> amount = GeneratedColumn<int>(
+      'amount', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _created_atMeta =
+      const VerificationMeta('created_at');
+  @override
+  late final GeneratedColumn<DateTime> created_at = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+  static const VerificationMeta _updated_atMeta =
+      const VerificationMeta('updated_at');
   @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+  late final GeneratedColumn<DateTime> updated_at = GeneratedColumn<DateTime>(
       'updated_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _deletedAtMeta = const VerificationMeta('deletedAt');
+  static const VerificationMeta _deleted_atMeta =
+      const VerificationMeta('deleted_at');
   @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+  late final GeneratedColumn<DateTime> deleted_at = GeneratedColumn<DateTime>(
       'deleted_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, type, createdAt, updatedAt, deletedAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        description,
+        category_id,
+        transaction_date,
+        amount,
+        created_at,
+        updated_at,
+        deleted_at
+      ];
   @override
-  String get aliasedName => _alias ?? 'categories';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'categories';
+  String get actualTableName => $name;
+  static const String $name = 'transactions';
   @override
-  VerificationContext validateIntegrity(Insertable<Category> instance,
+  VerificationContext validateIntegrity(Insertable<Transaction> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('description')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_descriptionMeta);
     }
-    if (data.containsKey('type')) {
+    if (data.containsKey('category_id')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+          _category_idMeta,
+          category_id.isAcceptableOrUnknown(
+              data['category_id']!, _category_idMeta));
     } else if (isInserting) {
-      context.missing(_typeMeta);
+      context.missing(_category_idMeta);
+    }
+    if (data.containsKey('transaction_date')) {
+      context.handle(
+          _transaction_dateMeta,
+          transaction_date.isAcceptableOrUnknown(
+              data['transaction_date']!, _transaction_dateMeta));
+    } else if (isInserting) {
+      context.missing(_transaction_dateMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+      context.handle(
+          _created_atMeta,
+          created_at.isAcceptableOrUnknown(
+              data['created_at']!, _created_atMeta));
     } else if (isInserting) {
-      context.missing(_createdAtMeta);
+      context.missing(_created_atMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+      context.handle(
+          _updated_atMeta,
+          updated_at.isAcceptableOrUnknown(
+              data['updated_at']!, _updated_atMeta));
     } else if (isInserting) {
-      context.missing(_updatedAtMeta);
+      context.missing(_updated_atMeta);
     }
     if (data.containsKey('deleted_at')) {
-      context.handle(_deletedAtMeta,
-          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
+      context.handle(
+          _deleted_atMeta,
+          deleted_at.isAcceptableOrUnknown(
+              data['deleted_at']!, _deleted_atMeta));
     }
     return context;
   }
@@ -304,27 +481,31 @@ class $CategoriesTable extends Categories
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Transaction map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Category(
-      id: attachedDatabase.options.types
+    return Transaction(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      type: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}type'])!,
-      createdAt: attachedDatabase.options.types
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      category_id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+      transaction_date: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}transaction_date'])!,
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
+      created_at: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.options.types
+      updated_at: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
-      deletedAt: attachedDatabase.options.types
+      deleted_at: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
     );
   }
 
   @override
-  $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(attachedDatabase, alias);
+  $TransactionsTable createAlias(String alias) {
+    return $TransactionsTable(attachedDatabase, alias);
   }
 }
 
@@ -425,6 +606,26 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         updated_at: updated_at ?? this.updated_at,
         deleted_at: deleted_at.present ? deleted_at.value : this.deleted_at,
       );
+  Transaction copyWithCompanion(TransactionsCompanion data) {
+    return Transaction(
+      id: data.id.present ? data.id.value : this.id,
+      description:
+          data.description.present ? data.description.value : this.description,
+      category_id:
+          data.category_id.present ? data.category_id.value : this.category_id,
+      transaction_date: data.transaction_date.present
+          ? data.transaction_date.value
+          : this.transaction_date,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      created_at:
+          data.created_at.present ? data.created_at.value : this.created_at,
+      updated_at:
+          data.updated_at.present ? data.updated_at.value : this.updated_at,
+      deleted_at:
+          data.deleted_at.present ? data.deleted_at.value : this.deleted_at,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Transaction(')
@@ -580,176 +781,407 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   }
 }
 
-class $TransactionsTable extends Transactions
-    with TableInfo<$TransactionsTable, Transaction> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $TransactionsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      hasAutoIncrement: true);
-  final VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 250),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  final VerificationMeta _category_idMeta =
-      const VerificationMeta('category_id');
-  @override
-  late final GeneratedColumn<int> category_id = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _transaction_dateMeta =
-      const VerificationMeta('transaction_date');
-  @override
-  late final GeneratedColumn<DateTime> transaction_date =
-      GeneratedColumn<DateTime>('transaction_date', aliasedName, false,
-          type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _amountMeta = const VerificationMeta('amount');
-  @override
-  late final GeneratedColumn<int> amount = GeneratedColumn<int>(
-      'amount', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _created_atMeta = const VerificationMeta('created_at');
-  @override
-  late final GeneratedColumn<DateTime> created_at = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _updated_atMeta = const VerificationMeta('updated_at');
-  @override
-  late final GeneratedColumn<DateTime> updated_at = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _deleted_atMeta = const VerificationMeta('deleted_at');
-  @override
-  late final GeneratedColumn<DateTime> deleted_at = GeneratedColumn<DateTime>(
-      'deleted_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        description,
-        category_id,
-        transaction_date,
-        amount,
-        created_at,
-        updated_at,
-        deleted_at
-      ];
-  @override
-  String get aliasedName => _alias ?? 'transactions';
-  @override
-  String get actualTableName => 'transactions';
-  @override
-  VerificationContext validateIntegrity(Insertable<Transaction> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
-    }
-    if (data.containsKey('category_id')) {
-      context.handle(
-          _category_idMeta,
-          category_id.isAcceptableOrUnknown(
-              data['category_id']!, _category_idMeta));
-    } else if (isInserting) {
-      context.missing(_category_idMeta);
-    }
-    if (data.containsKey('transaction_date')) {
-      context.handle(
-          _transaction_dateMeta,
-          transaction_date.isAcceptableOrUnknown(
-              data['transaction_date']!, _transaction_dateMeta));
-    } else if (isInserting) {
-      context.missing(_transaction_dateMeta);
-    }
-    if (data.containsKey('amount')) {
-      context.handle(_amountMeta,
-          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
-    } else if (isInserting) {
-      context.missing(_amountMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-          _created_atMeta,
-          created_at.isAcceptableOrUnknown(
-              data['created_at']!, _created_atMeta));
-    } else if (isInserting) {
-      context.missing(_created_atMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-          _updated_atMeta,
-          updated_at.isAcceptableOrUnknown(
-              data['updated_at']!, _updated_atMeta));
-    } else if (isInserting) {
-      context.missing(_updated_atMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-          _deleted_atMeta,
-          deleted_at.isAcceptableOrUnknown(
-              data['deleted_at']!, _deleted_atMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Transaction map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Transaction(
-      id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      description: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
-      category_id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
-      transaction_date: attachedDatabase.options.types.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}transaction_date'])!,
-      amount: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
-      created_at: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updated_at: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
-      deleted_at: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}deleted_at']),
-    );
-  }
-
-  @override
-  $TransactionsTable createAlias(String alias) {
-    return $TransactionsTable(attachedDatabase, alias);
-  }
-}
-
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
+  $AppDbManager get managers => $AppDbManager(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [categories, transactions];
+}
+
+typedef $$CategoriesTableCreateCompanionBuilder = CategoriesCompanion Function({
+  Value<int> id,
+  required String name,
+  required int type,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+});
+typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<int> type,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+});
+
+class $$CategoriesTableFilterComposer
+    extends Composer<_$AppDb, $CategoriesTable> {
+  $$CategoriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+      column: $table.deletedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$CategoriesTableOrderingComposer
+    extends Composer<_$AppDb, $CategoriesTable> {
+  $$CategoriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+      column: $table.deletedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CategoriesTableAnnotationComposer
+    extends Composer<_$AppDb, $CategoriesTable> {
+  $$CategoriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$CategoriesTableTableManager extends RootTableManager<
+    _$AppDb,
+    $CategoriesTable,
+    Category,
+    $$CategoriesTableFilterComposer,
+    $$CategoriesTableOrderingComposer,
+    $$CategoriesTableAnnotationComposer,
+    $$CategoriesTableCreateCompanionBuilder,
+    $$CategoriesTableUpdateCompanionBuilder,
+    (Category, BaseReferences<_$AppDb, $CategoriesTable, Category>),
+    Category,
+    PrefetchHooks Function()> {
+  $$CategoriesTableTableManager(_$AppDb db, $CategoriesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CategoriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<int> type = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<DateTime?> deletedAt = const Value.absent(),
+          }) =>
+              CategoriesCompanion(
+            id: id,
+            name: name,
+            type: type,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            required int type,
+            required DateTime createdAt,
+            required DateTime updatedAt,
+            Value<DateTime?> deletedAt = const Value.absent(),
+          }) =>
+              CategoriesCompanion.insert(
+            id: id,
+            name: name,
+            type: type,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CategoriesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDb,
+    $CategoriesTable,
+    Category,
+    $$CategoriesTableFilterComposer,
+    $$CategoriesTableOrderingComposer,
+    $$CategoriesTableAnnotationComposer,
+    $$CategoriesTableCreateCompanionBuilder,
+    $$CategoriesTableUpdateCompanionBuilder,
+    (Category, BaseReferences<_$AppDb, $CategoriesTable, Category>),
+    Category,
+    PrefetchHooks Function()>;
+typedef $$TransactionsTableCreateCompanionBuilder = TransactionsCompanion
+    Function({
+  Value<int> id,
+  required String description,
+  required int category_id,
+  required DateTime transaction_date,
+  required int amount,
+  required DateTime created_at,
+  required DateTime updated_at,
+  Value<DateTime?> deleted_at,
+});
+typedef $$TransactionsTableUpdateCompanionBuilder = TransactionsCompanion
+    Function({
+  Value<int> id,
+  Value<String> description,
+  Value<int> category_id,
+  Value<DateTime> transaction_date,
+  Value<int> amount,
+  Value<DateTime> created_at,
+  Value<DateTime> updated_at,
+  Value<DateTime?> deleted_at,
+});
+
+class $$TransactionsTableFilterComposer
+    extends Composer<_$AppDb, $TransactionsTable> {
+  $$TransactionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get category_id => $composableBuilder(
+      column: $table.category_id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get transaction_date => $composableBuilder(
+      column: $table.transaction_date,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get created_at => $composableBuilder(
+      column: $table.created_at, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updated_at => $composableBuilder(
+      column: $table.updated_at, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get deleted_at => $composableBuilder(
+      column: $table.deleted_at, builder: (column) => ColumnFilters(column));
+}
+
+class $$TransactionsTableOrderingComposer
+    extends Composer<_$AppDb, $TransactionsTable> {
+  $$TransactionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get category_id => $composableBuilder(
+      column: $table.category_id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get transaction_date => $composableBuilder(
+      column: $table.transaction_date,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get created_at => $composableBuilder(
+      column: $table.created_at, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updated_at => $composableBuilder(
+      column: $table.updated_at, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get deleted_at => $composableBuilder(
+      column: $table.deleted_at, builder: (column) => ColumnOrderings(column));
+}
+
+class $$TransactionsTableAnnotationComposer
+    extends Composer<_$AppDb, $TransactionsTable> {
+  $$TransactionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<int> get category_id => $composableBuilder(
+      column: $table.category_id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get transaction_date => $composableBuilder(
+      column: $table.transaction_date, builder: (column) => column);
+
+  GeneratedColumn<int> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get created_at => $composableBuilder(
+      column: $table.created_at, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updated_at => $composableBuilder(
+      column: $table.updated_at, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deleted_at => $composableBuilder(
+      column: $table.deleted_at, builder: (column) => column);
+}
+
+class $$TransactionsTableTableManager extends RootTableManager<
+    _$AppDb,
+    $TransactionsTable,
+    Transaction,
+    $$TransactionsTableFilterComposer,
+    $$TransactionsTableOrderingComposer,
+    $$TransactionsTableAnnotationComposer,
+    $$TransactionsTableCreateCompanionBuilder,
+    $$TransactionsTableUpdateCompanionBuilder,
+    (Transaction, BaseReferences<_$AppDb, $TransactionsTable, Transaction>),
+    Transaction,
+    PrefetchHooks Function()> {
+  $$TransactionsTableTableManager(_$AppDb db, $TransactionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TransactionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TransactionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TransactionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<int> category_id = const Value.absent(),
+            Value<DateTime> transaction_date = const Value.absent(),
+            Value<int> amount = const Value.absent(),
+            Value<DateTime> created_at = const Value.absent(),
+            Value<DateTime> updated_at = const Value.absent(),
+            Value<DateTime?> deleted_at = const Value.absent(),
+          }) =>
+              TransactionsCompanion(
+            id: id,
+            description: description,
+            category_id: category_id,
+            transaction_date: transaction_date,
+            amount: amount,
+            created_at: created_at,
+            updated_at: updated_at,
+            deleted_at: deleted_at,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String description,
+            required int category_id,
+            required DateTime transaction_date,
+            required int amount,
+            required DateTime created_at,
+            required DateTime updated_at,
+            Value<DateTime?> deleted_at = const Value.absent(),
+          }) =>
+              TransactionsCompanion.insert(
+            id: id,
+            description: description,
+            category_id: category_id,
+            transaction_date: transaction_date,
+            amount: amount,
+            created_at: created_at,
+            updated_at: updated_at,
+            deleted_at: deleted_at,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$TransactionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDb,
+    $TransactionsTable,
+    Transaction,
+    $$TransactionsTableFilterComposer,
+    $$TransactionsTableOrderingComposer,
+    $$TransactionsTableAnnotationComposer,
+    $$TransactionsTableCreateCompanionBuilder,
+    $$TransactionsTableUpdateCompanionBuilder,
+    (Transaction, BaseReferences<_$AppDb, $TransactionsTable, Transaction>),
+    Transaction,
+    PrefetchHooks Function()>;
+
+class $AppDbManager {
+  final _$AppDb _db;
+  $AppDbManager(this._db);
+  $$CategoriesTableTableManager get categories =>
+      $$CategoriesTableTableManager(_db, _db.categories);
+  $$TransactionsTableTableManager get transactions =>
+      $$TransactionsTableTableManager(_db, _db.transactions);
 }
